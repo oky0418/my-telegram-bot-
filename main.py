@@ -1,6 +1,5 @@
 import random
 import datetime
-import asyncio
 from telegram import Update
 from telegram.ext import Application, CommandHandler, CallbackContext
 
@@ -97,12 +96,8 @@ async def deposit(update: Update, context: CallbackContext):
         await update.message.reply_text("请输入正确的存款金额，例如：/deposit 100")
         return
 
-    # 如果是管理员，允许无限金币操作
-    if is_admin(user_id, update.effective_user.username):
-        await update.message.reply_text(f"管理员已存入 {amount} 金币！当前余额：无上限")
-    else:
-        user_data["balance"] += amount
-        await update.message.reply_text(f"成功存款 {amount} 金币！当前余额：{user_data['balance']}")
+    user_data["balance"] += amount
+    await update.message.reply_text(f"成功存款 {amount} 金币！当前余额：{user_data['balance']}")
 
 # 提款
 async def withdraw(update: Update, context: CallbackContext):
@@ -118,7 +113,7 @@ async def withdraw(update: Update, context: CallbackContext):
         return
 
     if is_admin(user_id, update.effective_user.username):
-        await update.message.reply_text(f"管理员已提款 {amount} 金币！余额无限！")
+        await update.message.reply_text(f"成功提款 {amount} 金币！（管理员无限金币权限）")
     elif user_data["balance"] < amount:
         await update.message.reply_text("余额不足！")
     else:
@@ -213,7 +208,7 @@ async def dragon_tiger(update: Update, context: CallbackContext):
         await update.message.reply_text("请输入有效的下注金额，例如：/dragon_tiger 50")
         return
 
-    if user_data["balance"] < bet_amount and not is_admin(user_id, update.effective_user.username):
+    if user_data["balance"] < bet_amount:
         await update.message.reply_text("余额不足，无法下注！")
         return
 
@@ -273,9 +268,17 @@ async def admin_adjust(update: Update, context: CallbackContext):
         f"调整金额：{amount}\n当前余额：{target_user_data['balance']}"
     )
 
+# 查看管理员无限金币权限
+async def admin_wallet(update: Update, context: CallbackContext):
+    user_id = update.effective_user.id
+    if is_admin(user_id, update.effective_user.username):
+        await update.message.reply_text("你是管理员，拥有无限金币权限！")
+    else:
+        await update.message.reply_text("你不是管理员，没有此权限！")
+
 # 设置命令处理程序
 async def main():
-    application = Application.builder().token("8064239780:AAGWmFo9PhJmhX57trg4JwNUltBjMt8uSsM").build()
+    application = Application.builder().token("YOUR_BOT_TOKEN").build()
 
     # 注册命令
     application.add_handler(CommandHandler("start", start))
@@ -289,6 +292,7 @@ async def main():
     application.add_handler(CommandHandler("redpacket", redpacket))
     application.add_handler(CommandHandler("grab", grab))
     application.add_handler(CommandHandler("admin_adjust", admin_adjust))
+    application.add_handler(CommandHandler("admin_wallet", admin_wallet))
 
     # 注册龙虎斗游戏命令
     application.add_handler(CommandHandler("dragon_tiger", dragon_tiger))
@@ -297,4 +301,5 @@ async def main():
     await application.run_polling()
 
 if __name__ == "__main__":
+    import asyncio
     asyncio.run(main())
