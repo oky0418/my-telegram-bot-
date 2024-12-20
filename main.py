@@ -278,7 +278,7 @@ async def admin_wallet(update: Update, context: CallbackContext):
 
 # 设置命令处理程序
 async def main():
-    application = Application.builder().token("YOUR_BOT_TOKEN").build()
+    application = Application.builder().token("8064239780:AAGWmFo9PhJmhX57trg4JwNUltBjMt8uSsM").build()
 
     # 注册命令
     application.add_handler(CommandHandler("start", start))
