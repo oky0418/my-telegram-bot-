@@ -1,16 +1,20 @@
+import logging
 import random
 import datetime
 from telegram import Update
 from telegram.ext import Application, CommandHandler, CallbackContext
 
-# 管理员列表（初始化为空）
+# 日志设置
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+# 管理员列表
 ADMINS = [123456789, 987654321]  # 示例管理员 ID
 ADMIN_USERNAMES = ["xianyuge_2014"]  # 管理员的用户名列表
 
-# 数据存储（使用字典模拟数据库）
+# 数据存储（模拟数据库）
 users = {}
 red_packets = []
-
 daily_signin_reward = 100
 
 def get_user_data(user_id):
@@ -276,11 +280,12 @@ async def admin_wallet(update: Update, context: CallbackContext):
     else:
         await update.message.reply_text("你不是管理员，没有此权限！")
 
-# 设置命令处理程序
+# 主函数，使用 asyncio 运行异步方法
 async def main():
-    application = Application.builder().token("8064239780:AAGWmFo9PhJmhX57trg4JwNUltBjMt8uSsM").build()
+    # 替换为你的实际 API 密钥
+    application = Application.builder().token("YOUR_BOT_TOKEN").build()
 
-    # 注册命令
+    # 注册命令处理
     application.add_handler(CommandHandler("start", start))
     application.add_handler(CommandHandler("help", help_command))
     application.add_handler(CommandHandler("signin", signin))
@@ -288,18 +293,17 @@ async def main():
     application.add_handler(CommandHandler("myid", myid))
     application.add_handler(CommandHandler("deposit", deposit))
     application.add_handler(CommandHandler("withdraw", withdraw))
-    application.add_handler(CommandHandler("transfer", transfer))
+    application.add_handler(CommandHandler("transfer",
+application.add_handler(CommandHandler("transfer", transfer))
     application.add_handler(CommandHandler("redpacket", redpacket))
     application.add_handler(CommandHandler("grab", grab))
+    application.add_handler(CommandHandler("dragon_tiger", dragon_tiger))
     application.add_handler(CommandHandler("admin_adjust", admin_adjust))
     application.add_handler(CommandHandler("admin_wallet", admin_wallet))
 
-    # 注册龙虎斗游戏命令
-    application.add_handler(CommandHandler("dragon_tiger", dragon_tiger))
-
-    # 启动机器人
+    # 启动 bot
     await application.run_polling()
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     import asyncio
     asyncio.run(main())
