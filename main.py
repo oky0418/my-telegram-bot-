@@ -4,7 +4,7 @@ import requests
 BOT_TOKEN = '7693399164:AAGVwaW7dI5vNsYy9HH7RU06-8ojgYvpZKs'
 
 # 你的 Webhook URL
-webhook_url = 'https://my-telegram-bot-23.onrender.com/7693399164:AAGVwaW7dI5vNsYy9HH7RU06-8ojgYvpZKs'  # 这里替换为你的 URL
+webhook_url = 'https://my-telegram-bot-24.onrender.com/7693399164:AAGVwaW7dI5vNsYy9HH7RU06-8ojgYvpZKs'  # 这里替换为你的 URL
 
 # 设置 Webhook
 set_webhook_url = f"https://api.telegram.org/bot{BOT_TOKEN}/setWebhook?url={webhook_url}"
