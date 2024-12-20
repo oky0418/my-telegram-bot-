@@ -1,3 +1,18 @@
+import requests
+
+# 你从 Telegram BotFather 获取的 bot token
+BOT_TOKEN = 'YOUR_BOT_TOKEN'
+
+# 你的 Webhook URL
+webhook_url = 'https://your-ngrok-url.ngrok.io/YOUR_BOT_TOKEN'  # 这里替换为你的 URL
+
+# 设置 Webhook
+set_webhook_url = f"https://api.telegram.org/bot{BOT_TOKEN}/setWebhook?url={webhook_url}"
+response = requests.get(set_webhook_url)
+
+# 打印响应
+print(response.json())
+
 import random
 import datetime
 from telegram import Update
