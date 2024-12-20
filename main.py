@@ -278,7 +278,7 @@ def admin_wallet(update: Update, context: CallbackContext):
 
 # 设置命令处理程序
 def main():
-    updater = Updater("7170558874:AAFMpVh_CsMMqR6jkuE6WMFLqY3RKmeXybk")
+    updater = Updater("7693399164:AAGVwaW7dI5vNsYy9HH7RU06-8ojgYvpZKs")
     dispatcher = updater.dispatcher
 
     # 注册命令
