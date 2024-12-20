@@ -8,3 +8,5 @@ services:
     branches:
       - main
 pip install requests
+import requests
+print(requests.__version__)
