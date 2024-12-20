@@ -7,3 +7,4 @@ services:
     plan: free
     branches:
       - main
+pip install requests
