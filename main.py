@@ -283,7 +283,7 @@ async def admin_wallet(update: Update, context: CallbackContext):
 # 主函数，使用 asyncio 运行异步方法
 async def main():
     # 替换为你的实际 API 密钥
-    application = Application.builder().token("YOUR_BOT_TOKEN").build()
+    application = Application.builder().token("8064239780:AAGWmFo9PhJmhX57trg4JwNUltBjMt8uSsM").build()
 
     # 注册命令处理
     application.add_handler(CommandHandler("start", start))
