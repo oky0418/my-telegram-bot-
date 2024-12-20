@@ -1,10 +1,10 @@
 import requests
 
 # 你从 Telegram BotFather 获取的 bot token
-BOT_TOKEN = 'YOUR_BOT_TOKEN'
+BOT_TOKEN = '7693399164:AAGVwaW7dI5vNsYy9HH7RU06-8ojgYvpZKs'
 
 # 你的 Webhook URL
-webhook_url = 'https://your-ngrok-url.ngrok.io/YOUR_BOT_TOKEN'  # 这里替换为你的 URL
+webhook_url = 'https://your-ngrok-url.ngrok.io/7693399164:AAGVwaW7dI5vNsYy9HH7RU06-8ojgYvpZKs'  # 这里替换为你的 URL
 
 # 设置 Webhook
 set_webhook_url = f"https://api.telegram.org/bot{BOT_TOKEN}/setWebhook?url={webhook_url}"
