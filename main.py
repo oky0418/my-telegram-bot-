@@ -1,20 +1,16 @@
-import logging
 import random
 import datetime
 from telegram import Update
 from telegram.ext import Application, CommandHandler, CallbackContext
 
-# 日志设置
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
-logger = logging.getLogger(__name__)
-
-# 管理员列表
+# 管理员列表（初始化为空）
 ADMINS = [123456789, 987654321]  # 示例管理员 ID
 ADMIN_USERNAMES = ["xianyuge_2014"]  # 管理员的用户名列表
 
-# 数据存储（模拟数据库）
+# 数据存储（使用字典模拟数据库）
 users = {}
 red_packets = []
+
 daily_signin_reward = 100
 
 def get_user_data(user_id):
@@ -203,7 +199,6 @@ async def dragon_tiger(update: Update, context: CallbackContext):
     user_id = update.effective_user.id
     user_data = get_user_data(user_id)
 
-    # 检查是否有下注金额
     try:
         bet_amount = int(context.args[0])
         if bet_amount <= 0:
@@ -216,17 +211,14 @@ async def dragon_tiger(update: Update, context: CallbackContext):
         await update.message.reply_text("余额不足，无法下注！")
         return
 
-    # 让玩家选择“龙”或“虎”
     choice = context.args[1].lower() if len(context.args) > 1 else None
     if choice not in ["龙", "虎"]:
         await update.message.reply_text("请选择有效的选项：/dragon_tiger <下注金额> <龙/虎>")
         return
 
-    # 生成龙和虎的点数
     dragon = random.randint(1, 6)
     tiger = random.randint(1, 6)
 
-    # 计算胜负
     if dragon > tiger:
         winner = "龙"
     elif tiger > dragon:
@@ -234,7 +226,6 @@ async def dragon_tiger(update: Update, context: CallbackContext):
     else:
         winner = "和"
 
-    # 比较玩家的选择与实际结果
     if winner == choice:
         user_data["balance"] += bet_amount
         await update.message.reply_text(f"恭喜！你选择了{choice}，获胜！\n龙: {dragon} - 虎: {tiger}\n你赢得了 {bet_amount} 金币！当前余额：{user_data['balance']}")
@@ -249,22 +240,18 @@ async def admin_adjust(update: Update, context: CallbackContext):
     user = update.effective_user
     user_id = user.id
 
-    # 检查是否是管理员
     if not is_admin(user_id, user.username):
         await update.message.reply_text("您无权使用此命令！")
         return
 
     try:
-        target_user_id = int(context.args[0])  # 目标用户 ID
-        amount = int(context.args[1])  # 调整的金额
+        target_user_id = int(context.args[0])
+        amount = int(context.args[1])
     except (IndexError, ValueError):
         await update.message.reply_text("使用格式：/admin_adjust <用户ID> <金额>\n例如：/admin_adjust 123456789 500")
         return
 
-    # 初始化或获取目标用户数据
     target_user_data = get_user_data(target_user_id)
-
-    # 调整目标用户余额
     target_user_data["balance"] += amount
 
     await update.message.reply_text(
@@ -280,12 +267,9 @@ async def admin_wallet(update: Update, context: CallbackContext):
     else:
         await update.message.reply_text("你不是管理员，没有此权限！")
 
-# 主函数，使用 asyncio 运行异步方法
 async def main():
-    # 替换为你的实际 API 密钥
     application = Application.builder().token("8064239780:AAGWmFo9PhJmhX57trg4JwNUltBjMt8uSsM").build()
 
-    # 注册命令处理
     application.add_handler(CommandHandler("start", start))
     application.add_handler(CommandHandler("help", help_command))
     application.add_handler(CommandHandler("signin", signin))
@@ -293,15 +277,13 @@ async def main():
     application.add_handler(CommandHandler("myid", myid))
     application.add_handler(CommandHandler("deposit", deposit))
     application.add_handler(CommandHandler("withdraw", withdraw))
-    application.add_handler(CommandHandler("transfer",
-application.add_handler(CommandHandler("transfer", transfer))
+    application.add_handler(CommandHandler("transfer", transfer))
     application.add_handler(CommandHandler("redpacket", redpacket))
     application.add_handler(CommandHandler("grab", grab))
     application.add_handler(CommandHandler("dragon_tiger", dragon_tiger))
     application.add_handler(CommandHandler("admin_adjust", admin_adjust))
     application.add_handler(CommandHandler("admin_wallet", admin_wallet))
 
-    # 启动 bot
     await application.run_polling()
 
 if __name__ == '__main__':
